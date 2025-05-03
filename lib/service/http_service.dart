@@ -21,62 +21,79 @@ class HttpService {
   }
 
   Future<List<dynamic>> fetchUsers() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/users'), headers: await _headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/users'),
+        headers: await _headers);
     return _processResponse(response);
   }
 
   Future<Map<String, dynamic>> fetchUserDetail(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/users/$id'), headers: await _headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/users/$id'),
+        headers: await _headers);
     return _processResponse(response);
   }
 
   Future<List<dynamic>> fetchItems() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/posts'), headers: await _headers);
-    return _processResponse(response);
+    final response = await http.get(Uri.parse('$baseUrl/api/items'),
+        headers: await _headers);
+    final Map<String, dynamic> json = jsonDecode(response.body);
+    return json['data'];
   }
 
   Future<Map<String, dynamic>> fetchItemDetail(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/posts/$id'), headers: await _headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/posts/$id/items'),
+        headers: await _headers);
     return _processResponse(response);
   }
 
   Future<List<dynamic>> fetchReturns(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/posts/$id/comments'), headers: await _headers);
+    final response = await http.get(
+        Uri.parse('$baseUrl/api/posts/$id/comments'),
+        headers: await _headers);
     return _processResponse(response);
   }
 
   Future<Map<String, dynamic>> fetchReturnDetail(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/posts/$id/comments'), headers: await _headers);
+    final response = await http.get(
+        Uri.parse('$baseUrl/api/posts/$id/comments'),
+        headers: await _headers);
     return _processResponse(response);
   }
 
   Future<List<dynamic>> fetchDetailBorrows(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id'), headers: await _headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id'),
+        headers: await _headers);
     return _processResponse(response);
   }
 
   Future<Map<String, dynamic>> fetchDetailBorrow(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id'), headers: await _headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id'),
+        headers: await _headers);
     return _processResponse(response);
   }
 
   Future<List<dynamic>> fetchCategoryItems(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/categories/$id/items'), headers: await _headers);
+    final response = await http.get(
+        Uri.parse('$baseUrl/api/categories/$id/items'),
+        headers: await _headers);
     return _processResponse(response);
   }
 
   Future<Map<String, dynamic>> fetchCategoryItem(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/categories/$id/items'), headers: await _headers);
+    final response = await http.get(
+        Uri.parse('$baseUrl/api/categories/$id/items'),
+        headers: await _headers);
     return _processResponse(response);
   }
 
   Future<List<dynamic>> fetchBorrowed(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id/items'), headers: await _headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id/items'),
+        headers: await _headers);
     return _processResponse(response);
   }
 
   Future<Map<String, dynamic>> fetchBorrowedDetail(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id/items'), headers: await _headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id/items'),
+        headers: await _headers);
     return _processResponse(response);
   }
 
