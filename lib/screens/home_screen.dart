@@ -10,6 +10,8 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: const Text('Beranda'),
+        backgroundColor: Colors.black87,
+        foregroundColor: Colors.white,
         automaticallyImplyLeading: false,
         centerTitle: true,
         actions: [
@@ -23,18 +25,22 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Selamat Datang 👋',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              '👋 Selamat Datang!',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
             ),
             const SizedBox(height: 8),
             const Text(
-              'Silakan pilih menu di bawah untuk melanjutkan:',
-              style: TextStyle(color: Colors.grey),
+              'Pilih menu untuk melanjutkan:',
+              style: TextStyle(color: Colors.grey, fontSize: 16),
             ),
             const SizedBox(height: 24),
             Expanded(
@@ -49,27 +55,29 @@ class HomeScreen extends StatelessWidget {
                     title: 'Lihat Barang',
                     color: Colors.indigo,
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => const ItemListScreen()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ItemListScreen(),
+                        ),
+                      );
                     },
-                  ),
-                  _buildMenuCard(
-                    icon: Icons.add_shopping_cart_outlined,
-                    title: 'Pinjam Barang',
-                    color: Colors.green,
-                    onTap: () {},
                   ),
                   _buildMenuCard(
                     icon: Icons.assignment_return_outlined,
                     title: 'Pengembalian',
                     color: Colors.orange,
-                    onTap: () {},
+                    onTap: () {
+                      // TODO: implement screen
+                    },
                   ),
                   _buildMenuCard(
                     icon: Icons.receipt_long_outlined,
                     title: 'Riwayat',
                     color: Colors.deepPurple,
-                    onTap: () {},
+                    onTap: () {
+                      // TODO: implement screen
+                    },
                   ),
                 ],
               ),
@@ -86,16 +94,22 @@ class HomeScreen extends StatelessWidget {
     required VoidCallback onTap,
     required Color color,
   }) {
-    return GestureDetector(
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
       onTap: onTap,
-      child: Card(
-        elevation: 3,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: color.withOpacity(0.1),
-          ),
+      child: Ink(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 6,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -105,7 +119,11 @@ class HomeScreen extends StatelessWidget {
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: color),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: color,
+                ),
               ),
             ],
           ),

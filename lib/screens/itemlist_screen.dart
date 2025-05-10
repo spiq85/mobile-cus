@@ -45,39 +45,62 @@ class _ItemListScreenState extends State<ItemListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Daftar Barang')),
+      appBar: AppBar(
+        title: const Text('Daftar Barang'),
+        backgroundColor: Colors.black87,
+        foregroundColor: Colors.white,
+      ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : error.isNotEmpty
               ? Center(child: Text('Gagal: $error'))
               : ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   itemCount: items.length,
                   itemBuilder: (context, index) {
                     final item = items[index];
                     final itemId = item['id_items'];
 
-                    return Card(
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: ListTile(
-                        title: Text(item['item_name'] ?? 'Nama tidak tersedia'),
-                        subtitle: Text(
-                          'Stok: ${item['stock'] ?? '-'} | Kategori: ${item['id_category']?['category_name'] ?? '-'}',
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                      child: Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        trailing: const Icon(Icons.chevron_right),
-                        onTap: () {
-                          if (itemId != null && itemId is int) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ItemsDetailScreen(itemId: itemId),
-                              ),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('ID barang tidak valid')),
-                            );
-                          }
-                        },
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.all(16),
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.indigo.shade100,
+                            child: Icon(Icons.inventory, color: Colors.indigo),
+                          ),
+                          title: Text(
+                            item['item_name'] ?? 'Nama tidak tersedia',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          subtitle: Text(
+                            'Stok: ${item['stock'] ?? '-'}\nKategori: ${item['id_category']?['category_name'] ?? '-'}',
+                            style: const TextStyle(height: 1.4),
+                          ),
+                          trailing: const Icon(Icons.chevron_right),
+                          onTap: () {
+                            if (itemId != null && itemId is int) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ItemsDetailScreen(itemId: itemId),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('ID barang tidak valid')),
+                              );
+                            }
+                          },
+                        ),
                       ),
                     );
                   },

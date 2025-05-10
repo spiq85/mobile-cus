@@ -99,13 +99,17 @@ class HttpService {
   }
 
   Future<Map<String, dynamic>> createBorrowed(Map<String, dynamic> data) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/api/borrowed'),
-      headers: await _headers,
-      body: jsonEncode(data),
-    );
-    return _processResponse(response);
-  }
+  final headers = await _headers;
+  headers['Content-Type'] = 'application/json'; // penting!
+
+  final response = await http.post(
+    Uri.parse('$baseUrl/api/borrowed'),
+    headers: headers,
+    body: jsonEncode(data),
+  );
+
+  return _processResponse(response);
+}
 
   dynamic _processResponse(http.Response response) {
     if (response.statusCode == 200 || response.statusCode == 201) {
