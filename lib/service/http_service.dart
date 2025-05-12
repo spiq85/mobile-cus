@@ -58,13 +58,20 @@ class HttpService {
 }
 
 
-  Future<List<dynamic>> fetchReturns(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/posts/$id/comments'), headers: await headers);
-    return _processResponse(response);
+ Future<List<dynamic>> fetchReturns() async {
+    final response = await http.get(Uri.parse('$baseUrl/api/detail-returns'),
+        headers: await headers);
+    final jsonData = _processResponse(response);
+
+    if (jsonData is Map<String, dynamic> && jsonData['status'] == 'success') {
+      return jsonData['data'];
+    } else {
+      throw Exception('Gagal memuat data pengembalian');
+    }
   }
 
   Future<Map<String, dynamic>> fetchReturnDetail(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/posts/$id/comments'), headers: await headers);
+    final response = await http.get(Uri.parse('$baseUrl/detail-returns/$id'), headers: await headers);
     return _processResponse(response);
   }
 
@@ -88,13 +95,21 @@ class HttpService {
     return _processResponse(response);
   }
 
-  Future<List<dynamic>> fetchBorrowed(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id/items'), headers: await headers);
-    return _processResponse(response);
+  Future<List<dynamic>> fetchBorrowed() async {
+    final response = await http.get(Uri.parse('$baseUrl/api/borrowed'),
+        headers: await headers);
+    final body = jsonDecode(response.body);
+
+    if (response.statusCode == 200 && body['success'] == true) {
+      return body['data']; // Ini yang penting: hanya kembalikan List, bukan Map
+    } else {
+      throw Exception('Gagal memuat data peminjaman');
+    }
   }
 
+
   Future<Map<String, dynamic>> fetchBorrowedDetail(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id/items'), headers: await headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/borrowed/$id'), headers: await headers);
     return _processResponse(response);
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sisfo_mobile/screens/borrow_screen.dart';
 import 'package:sisfo_mobile/screens/itemlist_screen.dart';
 import 'package:sisfo_mobile/screens/return_screen.dart';
 
@@ -66,11 +67,27 @@ class HomeScreen extends StatelessWidget {
                   ),
                   _buildMenuCard(
                     icon: Icons.assignment_return_outlined,
+                    title: 'Peminjaman',
+                    color: Colors.green,
+                    onTap: () {
+                     Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const BorrowScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildMenuCard(
+                    icon: Icons.assignment_return_outlined,
                     title: 'Pengembalian',
                     color: Colors.orange,
                     onTap: () {
-                      MaterialPageRoute(
-                        builder: (context) => const ReturnDetailScreen(),
+                     Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ReturnScreen(),
+                        ),
                       );
                     },
                   ),
