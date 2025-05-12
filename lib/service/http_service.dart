@@ -8,7 +8,7 @@ class HttpService {
 
   HttpService({required this.authService});
 
-  Future<Map<String, String>> get _headers async {
+  Future<Map<String, String>> get headers async {
     final token = await authService.getToken();
     if (token == null) {
       throw Exception('Token tidak ditemukan. Silakan login.');
@@ -23,7 +23,7 @@ class HttpService {
   Future<List<dynamic>> fetchItems() async {
   final response = await http.get(
     Uri.parse('$baseUrl/api/items'),
-    headers: await _headers,
+    headers: await headers,
   );
   final jsonData = _processResponse(response);
   if (jsonData['success'] == true) {
@@ -34,19 +34,19 @@ class HttpService {
 }
 
   Future<List<dynamic>> fetchUsers() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/users'), headers: await _headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/users'), headers: await headers);
     return _processResponse(response);
   }
 
   Future<Map<String, dynamic>> fetchUserDetail(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/users/$id'), headers: await _headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/users/$id'), headers: await headers);
     return _processResponse(response);
   }
 
   Future<Map<String, dynamic>> fetchItemsDetail(int id) async {
   final response = await http.get(
     Uri.parse('$baseUrl/api/items/$id'),
-    headers: await _headers,
+    headers: await headers,
   );
 
   final jsonData = _processResponse(response);
@@ -59,56 +59,62 @@ class HttpService {
 
 
   Future<List<dynamic>> fetchReturns(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/posts/$id/comments'), headers: await _headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/posts/$id/comments'), headers: await headers);
     return _processResponse(response);
   }
 
   Future<Map<String, dynamic>> fetchReturnDetail(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/posts/$id/comments'), headers: await _headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/posts/$id/comments'), headers: await headers);
     return _processResponse(response);
   }
 
   Future<List<dynamic>> fetchDetailBorrows(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id'), headers: await _headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id'), headers: await headers);
     return _processResponse(response);
   }
 
   Future<Map<String, dynamic>> fetchDetailBorrow(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id'), headers: await _headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id'), headers: await headers);
     return _processResponse(response);
   }
 
   Future<List<dynamic>> fetchCategoryItems(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/categories/$id/items'), headers: await _headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/categories/$id/items'), headers: await headers);
     return _processResponse(response);
   }
 
   Future<Map<String, dynamic>> fetchCategoryItem(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/categories/$id/items'), headers: await _headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/categories/$id/items'), headers: await headers);
     return _processResponse(response);
   }
 
   Future<List<dynamic>> fetchBorrowed(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id/items'), headers: await _headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id/items'), headers: await headers);
     return _processResponse(response);
   }
 
   Future<Map<String, dynamic>> fetchBorrowedDetail(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id/items'), headers: await _headers);
+    final response = await http.get(Uri.parse('$baseUrl/api/borrows/$id/items'), headers: await headers);
     return _processResponse(response);
   }
 
   Future<Map<String, dynamic>> createBorrowed(Map<String, dynamic> data) async {
-  final headers = await _headers;
-  headers['Content-Type'] = 'application/json'; // penting!
+  final requestHeaders = await headers;
+  requestHeaders['Content-Type'] = 'application/json';
 
   final response = await http.post(
     Uri.parse('$baseUrl/api/borrowed'),
-    headers: headers,
+    headers: requestHeaders,
     body: jsonEncode(data),
   );
 
-  return _processResponse(response);
+  if (response.statusCode == 201 || response.statusCode == 200) {
+    return jsonDecode(response.body);
+  } else {
+    print('STATUS: ${response.statusCode}');
+    print('BODY: ${response.body}'); // 🧠 Tambahkan ini untuk lihat detail error Laravel
+    throw Exception('Gagal meminjam barang: ${response.body}');
+  }
 }
 
   dynamic _processResponse(http.Response response) {

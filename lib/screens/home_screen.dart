@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sisfo_mobile/screens/itemlist_screen.dart';
+import 'package:sisfo_mobile/screens/return_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -68,7 +69,9 @@ class HomeScreen extends StatelessWidget {
                     title: 'Pengembalian',
                     color: Colors.orange,
                     onTap: () {
-                      // TODO: implement screen
+                      MaterialPageRoute(
+                        builder: (context) => const ReturnDetailScreen(),
+                      );
                     },
                   ),
                   _buildMenuCard(
