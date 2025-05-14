@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sisfo_mobile/screens/detail_borrow_screen.dart';
 import 'package:sisfo_mobile/service/http_service.dart';
 import 'package:sisfo_mobile/service/auth_service.dart';
 
@@ -46,14 +47,37 @@ class _BorrowScreenState extends State<BorrowScreen> {
                 itemCount: borroweds.length,
                 itemBuilder: (context, index) {
                   final item = borroweds[index];
+                  final code = item['id_details_borrow']['id_items']
+                          ['code_items'] ??
+                      'Tidak ada';
+                  final date =
+                      item['id_details_borrow']['date_borrowed'] ?? '-';
+                  final status = item['status']?.toLowerCase();
+                  final id = item['id_borrowed']; // ambil id peminjaman
+
                   return Card(
                     margin:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: ListTile(
-                      title:
-                          Text('Kode: ${item['id_borrowed'] ?? 'Tidak ada'}'),
-                      subtitle: Text('Tanggal: ${item['id_details_borrow']['date_borrowed'] ?? '-'}'),
-                      trailing: const Icon(Icons.chevron_right),
+                      title: Text('Kode: $code'),
+                      subtitle: Text('Tanggal: $date'),
+                      trailing: Text(
+                        status == 'approved' ? 'Approved' : 'Pending',
+                        style: TextStyle(
+                          color: status == 'approved'
+                              ? Colors.green
+                              : Colors.orange,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailBorrowScreen(id: id),
+                          ),
+                        );
+                      },
                     ),
                   );
                 },

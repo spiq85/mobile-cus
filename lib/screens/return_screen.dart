@@ -47,15 +47,24 @@ class _ReturnScreenState extends State<ReturnScreen> {
                 itemCount: returns.length,
                 itemBuilder: (context, index) {
                   final item = returns[index];
+                  final status = item['status']?.toLowerCase();
                   return Card(
                     margin:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: ListTile(
                       title:
-                          Text('Kode: ${item['user_name'] ?? 'Tidak ada'}'),
+                          Text('Kode: ${item['code_item'] ?? 'Tidak ada'}'),
                       subtitle: Text(
-                          'Status: ${item['status'] ?? 'Tidak diketahui'}'),
-                      trailing: const Icon(Icons.chevron_right),
+                          'Tanggal: ${item['date_return'] ?? 'Tidak diketahui'}'),
+                      trailing: Text(
+                        status == 'approved' ? 'Approved' : 'Pending',
+                        style: TextStyle(
+                          color: status == 'approved'
+                              ? Colors.green
+                              : Colors.orange,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       onTap: () {
                         // Navigasi ke halaman detail (opsional)
                       },

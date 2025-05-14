@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:sisfo_mobile/service/auth_service.dart';
+import 'package:http_parser/http_parser.dart';
 
 class HttpService {
   static const String baseUrl = 'http://127.0.0.1:8000'; 
@@ -131,6 +134,64 @@ class HttpService {
     throw Exception('Gagal meminjam barang: ${response.body}');
   }
 }
+
+Future<Map<String, dynamic>> createDetailReturn({
+    required int idBorrowed,
+    required String description,
+    required String dateReturn,
+    File? imageFile,
+    Uint8List? webImageBytes,
+    String? webImageName,
+  }) async {
+    final token = await authService.getToken();
+    final uri = Uri.parse('$baseUrl/api/detail-returns');
+
+    final request = http.MultipartRequest('POST', uri);
+    request.headers['Authorization'] = 'Bearer $token';
+    request.headers['Accept'] = 'application/json';
+
+    // ✅ Tambahkan semua field yang dibutuhkan oleh backend Laravel
+    request.fields['id_borrowed'] = idBorrowed.toString();
+    request.fields['description'] = description;
+    request.fields['date_return'] = dateReturn;
+
+    // ✅ Tambahkan gambar
+    if (kIsWeb && webImageBytes != null && webImageName != null) {
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          'item_image',
+          webImageBytes,
+          filename: webImageName,
+          contentType: MediaType('image', 'jpeg'),
+        ),
+      );
+    } else if (imageFile != null) {
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'item_image',
+          imageFile.path,
+          contentType: MediaType('image', 'jpeg'),
+        ),
+      );
+    } else {
+      throw Exception('Gambar tidak ditemukan');
+    }
+
+    // ✅ Kirim request dan handle responsenya
+    final response = await request.send();
+    final responseBody = await response.stream.bytesToString();
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      return jsonDecode(responseBody);
+    } else {
+      print('STATUS: ${response.statusCode}');
+      print('BODY: $responseBody');
+      throw Exception('Gagal mengirim pengembalian: $responseBody');
+    }
+  }
+
+
+
 
   dynamic _processResponse(http.Response response) {
     if (response.statusCode == 200 || response.statusCode == 201) {
