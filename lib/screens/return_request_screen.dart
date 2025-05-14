@@ -7,8 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:sisfo_mobile/service/auth_service.dart';
 import 'package:sisfo_mobile/service/http_service.dart';
-import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
+
 
 class DetailReturnScreen extends StatefulWidget {
   final int itemId;

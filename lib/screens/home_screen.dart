@@ -91,14 +91,6 @@ class HomeScreen extends StatelessWidget {
                       );
                     },
                   ),
-                  _buildMenuCard(
-                    icon: Icons.receipt_long_outlined,
-                    title: 'Riwayat',
-                    color: Colors.deepPurple,
-                    onTap: () {
-                      // TODO: implement screen
-                    },
-                  ),
                 ],
               ),
             ),
