@@ -122,7 +122,7 @@ class _DetailReturnScreenState extends State<DetailReturnScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Form Pengembalian'),
+        title: const Text('Pengembalian Barang'),
         backgroundColor: Colors.black87,
         foregroundColor: Colors.white,
       ),

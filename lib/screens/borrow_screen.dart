@@ -24,69 +24,63 @@ class _BorrowScreenState extends State<BorrowScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Peminjaman Barang'),
-          backgroundColor: Colors.black87,
-          foregroundColor: Colors.white,
-          centerTitle: true,
-        ),
-        body: FutureBuilder<List<dynamic>>(
-          future: _futureBorroweds,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text('Tidak ada data peminjaman.'));
-            } else {
-              final borroweds = snapshot.data!;
-              return ListView.builder(
-                itemCount: borroweds.length,
-                itemBuilder: (context, index) {
-                  final item = borroweds[index];
-                  final code = item['id_details_borrow']['id_items']
-                          ['code_items'] ??
-                      'Tidak ada';
-                  final date =
-                      item['id_details_borrow']['date_borrowed'] ?? '-';
-                  final status = item['status']?.toLowerCase();
-                  final id = item['id_borrowed']; // ambil id peminjaman
-
-                  return Card(
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: ListTile(
-                      title: Text('Kode: $code'),
-                      subtitle: Text('Tanggal: $date'),
-                      trailing: Text(
-                        status == 'approved' ? 'Approved' : 'Pending',
-                        style: TextStyle(
-                          color: status == 'approved'
-                              ? Colors.green
-                              : Colors.orange,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DetailBorrowScreen(id: id),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
-              );
-            }
-          },
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Peminjaman Barang'),
+        backgroundColor: Colors.black87,
+        foregroundColor: Colors.white,
       ),
-      debugShowCheckedModeBanner: false,
+      body: FutureBuilder<List<dynamic>>(
+        future: _futureBorroweds,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('Tidak ada data peminjaman.'));
+          } else {
+            final borroweds = snapshot.data!;
+            return ListView.builder(
+              itemCount: borroweds.length,
+              itemBuilder: (context, index) {
+                final item = borroweds[index];
+                final code = item['id_details_borrow']['id_items']
+                        ['code_items'] ??
+                    'Tidak ada';
+                final date = item['id_details_borrow']['date_borrowed'] ?? '-';
+                final status = item['status']?.toLowerCase();
+                final id = item['id_borrowed']; // ambil id peminjaman
+
+                return Card(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: ListTile(
+                    title: Text('Kode: $code'),
+                    subtitle: Text('Tanggal: $date'),
+                    trailing: Text(
+                      status == 'approved' ? 'Approved' : 'Pending',
+                      style: TextStyle(
+                        color:
+                            status == 'approved' ? Colors.green : Colors.orange,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailBorrowScreen(id: id),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            );
+          }
+        },
+      ),
     );
   }
 }
